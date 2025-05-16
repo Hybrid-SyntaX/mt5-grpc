@@ -1,0 +1,708 @@
+syntax = "proto3";
+import "google/protobuf/timestamp.proto";
+import "enums.proto";
+
+
+message Error {
+  int32 code = 1;
+  string message = 2;
+}
+
+message Rates {
+  repeated int64  time = 1;
+  repeated double high = 2;
+  repeated double low = 3;
+  repeated double open = 4;
+  repeated double close = 5;
+  repeated double real_volume = 6;
+  repeated double tick_volume = 7;
+  repeated double spread = 8;
+}
+
+message Ticks {
+  repeated int64  time = 1;
+  repeated double bid = 2;
+  repeated double ask = 3;
+  repeated double last = 4;
+  repeated uint64 volume = 5;
+  repeated int64 time_msc = 6;
+  repeated TickFlag flags = 7;
+  repeated double volume_real = 8;
+}
+
+message Tick {
+  int64  time = 1;
+  double bid = 2;
+  double ask = 3;
+  double last = 4;
+  uint64 volume = 5;
+  int64 time_msc = 6;
+  uint32 flags = 7;
+  double volume_real = 8;
+}
+
+message CopyRatesRangeRequest {
+  string symbol = 1;
+  TimeFrame timeframe = 2;
+  google.protobuf.Timestamp date_from = 3;
+  google.protobuf.Timestamp date_to = 4;
+}
+
+message CopyRatesFromRequest {
+  string symbol = 1;
+  TimeFrame timeframe = 2;
+  google.protobuf.Timestamp  date_from = 3;
+  int32 count = 4;
+}
+
+message CopyRatesFromPosRequest {
+  string symbol = 1;
+  TimeFrame timeframe = 2;
+  int64 start_pos = 3;
+  int32 count = 4;
+}
+
+message CopyTicksFromRequest {
+  string symbol = 1;
+  google.protobuf.Timestamp  date_from = 2;
+  int32 count = 3;
+  int32 flags = 4;
+}
+
+message CopyTicksRangeRequest {
+  string symbol = 1;
+  google.protobuf.Timestamp  date_from = 2;
+  google.protobuf.Timestamp  date_to = 3;
+  int32 flags = 4;
+}
+
+
+message CopyRatesResponse {
+  oneof resp{
+    Rates rates = 1;
+    Error error = 2;
+  }
+}
+
+message CopyTicksResponse {
+  oneof resp{
+    Ticks ticks = 1;
+    Error error = 2;
+  }
+}
+
+message SymbolsGetRequest {
+  optional string group = 1;
+  optional Error error = 2;
+}
+
+message SymbolsGetResponse {
+  repeated SymbolInfo symbols = 1;
+  optional Error error = 2;
+}
+
+message SymbolInfo {
+  bool custom = 1;
+  bool select = 2;
+  bool visible = 3;
+  bool spread_float = 4;
+  bool margin_hedged_use_leg = 5;
+
+  SymbolChartMode chart_mode = 10;
+  int32 session_deals = 11;
+  int32 session_buy_orders = 12;
+  int32 session_sell_orders = 13;
+  int32 volume = 14;
+  int32 volumehigh = 15;
+  int32 volumelow = 16;
+  int32 digits = 17;
+  int32 spread = 18;
+  int32 ticks_bookdepth = 19;
+  SymbolCalcMode trade_calc_mode = 20;
+  SymbolTradeMode trade_mode = 21;
+  int32 trade_stops_level = 22;
+  int32 trade_freeze_level = 23;
+  int32 trade_exemode = 24;
+  SymbolSwapMode swap_mode = 25;
+  int32 swap_rollover3days = 26;
+  SymbolTradeExecution expiration_mode = 27;
+  int32 filling_mode = 28;
+  int32 order_mode = 29;
+  SymbolOrderGTCMode order_gtc_mode = 30;
+  SymbolOptionMode option_mode = 31;
+  SymbolOptionRight option_right = 32;
+
+  int64 time = 40;
+  int64 start_time = 41;
+  int64 expiration_time = 42;
+
+  double bid = 50;
+  double bidhigh = 51;
+  double bidlow = 52;
+  double ask = 53;
+  double askhigh = 54;
+  double asklow = 55;
+  double last = 56;
+  double lasthigh = 57;
+  double lastlow = 58;
+  double volume_real = 59;
+  double volumehigh_real = 60;
+  double volumelow_real = 61;
+  double option_strike = 62;
+  double point = 63;
+  double trade_tick_value = 64;
+  double trade_tick_value_profit = 65;
+  double trade_tick_value_loss = 66;
+  double trade_tick_size = 67;
+  double trade_contract_size = 68;
+  double trade_accrued_interest = 69;
+  double trade_face_value = 70;
+  double trade_liquidity_rate = 71;
+  double volume_min = 72;
+  double volume_max = 73;
+  double volume_step = 74;
+  double volume_limit = 75;
+  double swap_long = 76;
+  double swap_short = 77;
+  double margin_initial = 78;
+  double margin_maintenance = 79;
+  double session_volume = 80;
+  double session_turnover = 81;
+  double session_interest = 82;
+  double session_buy_orders_volume = 83;
+  double session_sell_orders_volume = 84;
+  double session_open = 85;
+  double session_close = 86;
+  double session_aw = 87;
+  double session_price_settlement = 88;
+  double session_price_limit_min = 89;
+  double session_price_limit_max = 90;
+  double margin_hedged = 91;
+  double price_change = 92;
+  double price_volatility = 93;
+  double price_theoretical = 94;
+  double price_greeks_delta = 95;
+  double price_greeks_theta = 96;
+  double price_greeks_gamma = 97;
+  double price_greeks_vega = 98;
+  double price_greeks_rho = 99;
+  double price_greeks_omega = 100;
+  double price_sensitivity = 101;
+
+  string basis = 110;
+  string category = 111;
+  string currency_base = 112;
+  string currency_profit = 113;
+  string currency_margin = 114;
+  string bank = 115;
+  string description = 116;
+  string exchange = 117;
+  string formula = 118;
+  string isin = 119;
+  string name = 120;
+  string page = 121;
+  string path = 122;
+}
+
+message SymbolInfoRequest {
+  string symbol = 1;
+}
+
+message SymbolInfoResponse {
+  oneof resp {
+    SymbolInfo symbol_info = 1;
+    Error error = 2;
+  }
+}
+
+message SymbolsTotalResponse {
+  oneof resp {
+    int64 symbols_total = 1;
+    Error error = 2;
+  }
+}
+
+message SymbolInfoTickRequest {
+  string symbol = 1;
+}
+
+message SymbolInfoTickResponse {
+  oneof resp {
+    Tick tick = 1;
+    Error error = 2;
+  }
+}
+
+message SymbolSelectRequest {
+  string symbol = 1;
+  bool enable = 2;
+}
+
+message SymbolSelectResponse {
+  bool success = 1;
+  Error error = 2;
+}
+
+// For orders
+
+message TradeOrder {
+  int64 ticket = 1;
+  int64 time_setup = 2;
+  int64 time_setup_msc = 3;
+  int64 time_done = 4;
+  int64 time_done_msc = 5;
+  int64 time_expiration = 6;
+  int32 type = 7;
+  int32 type_time = 8;
+  int32 type_filling = 9;
+  OrderState state = 10;
+  int32 magic = 11;
+  double volume_current = 12;
+  double price_open = 13;
+  double sl = 14;
+  double tp = 15;
+  double price_current = 16;
+  string symbol = 17;
+  string comment = 18;
+  string external_id = 19;
+}
+
+message TradeRequest {
+  TradeAction action = 1;
+  int32 magic = 2;
+  optional int64 order = 3;
+  optional string symbol = 4;
+  double volume = 5;
+  optional double price = 6;
+  optional double stoplimit = 7;
+  optional double sl = 8;
+  optional double tp = 9;
+  int32 deviation = 10;
+  OrderType type = 11;
+  OrderTypeFilling type_filling = 12;
+  OrderTime type_time = 13;
+  optional int64 expiration = 14;
+  optional string comment = 15;
+  optional int64 position = 16;
+  optional int64 position_by = 17;
+}
+
+message OrderCheckResult {
+  TradeReturnCode retcode = 1;           // Operation return code
+  double balance = 2;          // Balance value after execution
+  double equity = 3;           // Equity value after execution
+  double profit = 4;           // Floating profit value
+  double margin = 5;           // Margin requirements
+  double margin_free = 6;      // Free margin after execution
+  double margin_level = 7;     // Margin level after execution
+  string comment = 8;          // Comment on check result
+  TradeRequest request = 9;    // Original trade request
+}
+message OrderSendResult {
+  double ask = 1;                  // The ask price
+  double bid = 2;                  // The bid price
+  string comment = 3;              // Comment associated with the order
+  int64 deal = 4;                  // Deal ID
+  int64 order = 5;                 // Order ID
+  double price = 6;                // Price at which the order was executed
+  TradeRequest request = 7;               // Request ID
+  int64 request_id = 8;            // Request ID for tracking
+  TradeReturnCode retcode = 9;               // Return code of the order operation
+  int32 retcode_external = 10;     // External return code
+  double volume = 11;              // Volume of the order
+}
+// Request and Response messages for OrderSend
+message OrderSendRequest {
+  TradeRequest trade_request = 1;
+}
+
+
+message OrderSendResponse {
+  oneof resp{
+    OrderSendResult order_send_result = 1;
+    Error error = 2;
+  }
+}
+
+// Request and Response messages for OrdersGet
+message OrdersGetRequest {
+  optional string symbol = 1;
+  optional string group = 2;
+  optional int64 ticket = 3;
+}
+
+message OrdersGetResponse {
+  repeated TradeOrder orders = 1;
+  optional Error error = 2;
+}
+
+// Request and Response messages for OrderCheck
+message OrderCheckRequest {
+  TradeRequest trade_request = 1;
+}
+
+// Response for order check operation
+message OrderCheckResponse {
+  oneof resp {
+    OrderCheckResult order_check_result = 1;
+    Error error = 2;
+  }
+
+}
+
+message OrdersTotalResponse {
+  oneof resp {
+    int32 total = 1;
+    Error error = 2;
+  }
+}
+
+message OrderCalcMarginRequest {
+  OrderType action = 1;      // Order type (ORDER_TYPE_BUY or ORDER_TYPE_SELL)
+  string symbol = 2;     // Symbol name
+  double volume = 3;     // Volume
+  double price = 4;      // Open price
+}
+
+// Response for margin calculation
+message OrderCalcMarginResponse {
+  oneof  resp{
+    double margin = 1;     // Calculated margin value
+    Error error = 2;       // Error information if any
+  }
+}
+
+// Request for calculating profit
+message OrderCalcProfitRequest {
+  OrderType action = 1;      // Order type (ORDER_TYPE_BUY or ORDER_TYPE_SELL)
+  string symbol = 2;     // Symbol name
+  double volume = 3;     // Volume
+  double price_open = 4; // Open price
+  double price_close = 5;// Close price
+}
+
+// Response for profit calculation
+message OrderCalcProfitResponse {
+  oneof  resp{
+    double profit = 1;     // Calculated profit value
+    Error error = 2;       // Error information if any
+  }
+}
+
+// Positions
+
+message TradePosition {
+  int64 ticket = 1;
+  string symbol = 2;
+  PositionType type = 3;
+  int32 magic = 4;
+  int64 identifier = 5;
+  string external_id = 6;
+  PositionReason reason = 7;
+  double volume = 8;
+  double price_open = 9;
+  double sl = 10;
+  double tp = 11;
+  double price_current = 12;
+  double swap = 13;
+  double profit = 14;
+  string comment = 15;
+  int64 time = 16;
+  int64 time_msc = 17;
+  int64 time_update = 18;
+  int64 time_update_msc = 19;
+}
+
+message PositionsGetRequest {
+  // Optional filtering parameters
+  optional string symbol = 1;     // Specific symbol name
+  optional string group = 2;      // Group filter for symbols
+  optional int64 ticket = 3;      // Specific position ticket
+}
+
+message PositionsGetResponse {
+  repeated TradePosition positions = 1;
+  optional Error error = 2;
+}
+
+message PositionsTotalResponse {
+  oneof resp {
+    int32 total = 1;
+    Error error = 2;
+  }
+}
+
+// History Orders
+message HistoryOrdersTotalRequest {
+  google.protobuf.Timestamp date_from = 1;  // Unix timestamp in seconds since 1970.01.01
+  google.protobuf.Timestamp date_to = 2;
+}
+message HistoryOrdersTotalResponse {
+  oneof resp{
+    int32 total = 1;
+    Error error = 2;
+  }
+}
+
+message HistoryOrdersGetRequest {
+  optional google.protobuf.Timestamp date_from = 1;  // Unix timestamp in seconds since 1970.01.01
+  optional google.protobuf.Timestamp date_to = 2;
+  optional uint64 ticket = 3;      // Filter by order ticket
+  optional uint64 position = 4;    // Filter by position ticket
+  optional string group = 5;         // Optional symbol group filter
+}
+message HistoryOrdersGetResponse {
+  repeated TradeOrder orders = 1;
+  optional Error error = 2;
+}
+
+// History Deals
+message TradeDeal {
+  int64 ticket = 1;
+  string symbol = 2;
+  DealType type = 3;
+  DealEntry entry = 4;
+  DealReason reason = 5;
+  double volume = 6;
+  double price = 7;
+  double commission = 8;
+  double swap = 9;
+  double profit = 10;
+  int32 magic = 11;
+  int64 order = 12;
+  int64 position_id = 13;
+  string comment = 14;
+  string external_id = 15;
+  double fee = 16;
+  int64 time = 17;
+  int64 time_msc = 18;
+}
+
+
+message HistoryDealsTotalRequest {
+  google.protobuf.Timestamp date_from = 1;  // Unix timestamp in seconds since 1970.01.01
+  google.protobuf.Timestamp date_to = 2;
+}
+message HistoryDealsTotalResponse {
+  oneof resp{
+    int32 total = 1;
+    Error error = 2;
+  }
+}
+
+message HistoryDealsGetRequest {
+  optional google.protobuf.Timestamp date_from = 1;  // Unix timestamp in seconds since 1970.01.01
+  optional google.protobuf.Timestamp date_to = 2;
+  optional uint64 ticket = 3;      // Filter by order ticket
+  optional uint64 position = 4;    // Filter by position ticket
+  optional string group = 5;         // Optional symbol group filter
+}
+message HistoryDealsGetResponse {
+  repeated TradeDeal deals = 1;
+  optional  Error error = 2;
+}
+
+// Last Error
+message LastErrorResponse {
+  Error error = 1;
+}
+
+// Market
+message BookInfo {
+  double price = 1;
+  BookType type = 2;       // 0 = buy, 1 = sell, etc.
+  double volume = 3;
+  double volume_dbl = 4;
+}
+
+message MarketBookAddRequest {
+  string symbol = 1;
+}
+
+message MarketBookAddResponse {
+  oneof resp {
+    bool success = 1;
+    Error error = 2;
+  }
+}
+
+message MarketBookGetRequest {
+  string symbol = 1;
+}
+
+message MarketBookGetResponse {
+  repeated BookInfo book_infos = 1;
+  optional Error error = 2;
+}
+
+message MarketBookReleaseRequest {
+  string symbol = 1;
+}
+
+message MarketBookReleaseResponse {
+  oneof resp {
+    bool success = 1;
+    Error error = 2;
+  }
+}
+
+// Misc
+
+message InitializeRequest {
+  string path = 1;
+  string server = 2;
+  int64 login = 3;
+  string password = 4;
+}
+message InitializeResponse {
+  oneof resp {
+    bool success = 1;
+    Error error = 2;
+  }
+}
+
+message LoginRequest {
+  int64 login = 1;
+  string password = 2;
+  string server = 3;
+}
+message LoginResponse {
+  oneof resp {
+    bool success = 1;
+    Error error = 2;
+  }
+}
+
+message ShutdownResponse {
+  oneof resp {
+    bool success = 1;
+    Error error = 2;
+  }
+}
+
+message Version {
+  int32 terminal_version = 1;
+  int32 build = 2;
+  string release_date = 3;
+}
+
+message VersionResponse {
+  oneof resp {
+    Version version = 1;
+    Error error = 2;
+  }
+}
+
+message AccountInfo {
+  double assets = 1;
+  double balance = 2;
+  double commission_blocked = 3;
+  string company = 4;
+  double credit = 5;
+  string currency = 6;
+  int32 currency_digits = 7;
+  double equity = 8;
+  int32 fifo_close = 9;
+  int32 leverage = 10;
+  double liabilities = 11;
+  int32 limit_orders = 12;
+  uint64 login = 13;
+  double margin = 14;
+  double margin_free = 15;
+  double margin_initial = 16;
+  double margin_level = 17;
+  double margin_maintenance = 18;
+  AccountMarginMode margin_mode = 19;
+  double margin_so_call = 20;
+  int32 margin_so_mode = 21;
+  double margin_so_so = 22;
+  string name = 23;
+  double profit = 24;
+  string server = 25;
+  bool trade_allowed = 26;
+  bool trade_expert = 27;
+  AccountTradeMode trade_mode = 28;
+}
+
+message TerminalInfo {
+  int32 build = 1;
+  int32 codepage = 2;
+  string commondata_path = 3;
+  bool community_account = 4;
+  double community_balance = 5;
+  bool community_connection = 6;
+  string company = 7;
+  bool connected = 8;
+  string data_path = 9;
+  bool dlls_allowed = 10;
+  bool email_enabled = 11;
+  bool ftp_enabled = 12;
+  string language = 13;
+  int32 maxbars = 14;
+  bool mqid = 15;
+  string name = 16;
+  bool notifications_enabled = 17;
+  string path = 18;
+  int32 ping_last = 19;
+  float retransmission = 20;
+  bool tradeapi_disabled = 21;
+  bool trade_allowed = 22;
+}
+
+
+message AccountInfoResponse {
+  oneof resp {
+    AccountInfo account_info = 1;
+    Error error = 2;
+  }
+}
+
+message TerminalInfoResponse {
+  oneof resp {
+    TerminalInfo terminal_info = 1;
+    Error error = 2;
+  }
+}
+
+message CloseRequest {
+  string symbol = 1;        // Required: symbol to close
+  optional string comment = 2;       // Optional: comment
+  optional int64 ticket = 3;         // Optional: specific ticket to close
+}
+
+message CloseResponse {
+  oneof resp{
+    OrderSendResult order_send_result = 1;
+    Error error = 2;
+  }
+}
+
+message BuyRequest {
+  string symbol = 1;        // Required: symbol to buy
+  double volume = 2;        // Required: volume to buy
+  optional double price = 3;         // Optional: price (0 = market)
+  optional string comment = 4;       // Optional: comment
+  optional int64 ticket = 5;         // Optional: ticket to modify
+}
+
+message BuyResponse {
+  oneof resp{
+    OrderSendResult order_send_result = 1;
+    Error error = 2;
+  }
+}
+
+message SellRequest {
+  string symbol = 1;        // Required: symbol to sell
+  double volume = 2;        // Required: volume to sell
+  optional double price = 3;         // Optional: price (0 = market)
+  optional string comment = 4;       // Optional: comment
+  optional int64 ticket = 5;         // Optional: ticket to modify
+}
+
+message SellResponse {
+  oneof resp{
+    OrderSendResult order_send_result = 1;
+    Error error = 2;
+  }
+}

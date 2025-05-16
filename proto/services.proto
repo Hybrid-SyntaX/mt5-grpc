@@ -1,0 +1,63 @@
+syntax = "proto3";
+
+import "messages.proto";
+import "google/protobuf/empty.proto";
+
+service MetaTrader5Service {
+  // market data
+  rpc CopyRatesRange(CopyRatesRangeRequest) returns (CopyRatesResponse);
+  rpc CopyRatesFrom(CopyRatesFromRequest) returns (CopyRatesResponse);
+  rpc CopyRatesFromPos(CopyRatesFromPosRequest) returns (CopyRatesResponse);
+  rpc CopyTicksFrom(CopyTicksFromRequest) returns (CopyTicksResponse);
+  rpc CopyTicksRange(CopyTicksRangeRequest) returns (CopyTicksResponse);
+
+  // Symbols
+
+  rpc SymbolsGet(SymbolsGetRequest) returns (SymbolsGetResponse);
+  rpc SymbolInfo(SymbolInfoRequest) returns (SymbolInfoResponse);
+  rpc SymbolsTotal(google.protobuf.Empty) returns (SymbolsTotalResponse);
+  rpc SymbolInfoTick(SymbolInfoTickRequest) returns (SymbolInfoTickResponse);
+  rpc SymbolSelect(SymbolSelectRequest) returns (SymbolSelectResponse);
+
+  // Orders
+  rpc OrderSend(OrderSendRequest) returns (OrderSendResponse);
+  rpc OrderCheck(OrderCheckRequest) returns (OrderCheckResponse);
+  rpc OrdersTotal(google.protobuf.Empty) returns (OrdersTotalResponse);
+  rpc OrdersGet(OrdersGetRequest) returns (OrdersGetResponse);
+  rpc OrderCalcMargin(OrderCalcMarginRequest) returns (OrderCalcMarginResponse);
+  rpc OrderCalcProfit(OrderCalcProfitRequest) returns (OrderCalcProfitResponse);
+
+  // Positions
+
+  rpc PositionsGet(PositionsGetRequest) returns (PositionsGetResponse);
+  rpc PositionsTotal(google.protobuf.Empty) returns (PositionsTotalResponse);
+
+  // History
+  rpc HistoryOrdersTotal(HistoryOrdersTotalRequest) returns (HistoryOrdersTotalResponse);
+  rpc HistoryOrdersGet(HistoryOrdersGetRequest) returns (HistoryOrdersGetResponse);
+
+  rpc HistoryDealsTotal(HistoryDealsTotalRequest) returns (HistoryDealsTotalResponse);
+  rpc HistoryDealsGet(HistoryDealsGetRequest) returns (HistoryDealsGetResponse);
+
+
+  // Error
+  rpc LastError(google.protobuf.Empty) returns (LastErrorResponse);
+
+  // Market
+  rpc MarketBookAdd(MarketBookAddRequest) returns (MarketBookAddResponse);
+  rpc MarketBookGet(MarketBookGetRequest) returns (MarketBookGetResponse);
+  rpc MarketBookRelease(MarketBookReleaseRequest) returns (MarketBookReleaseResponse);
+
+  // Misc
+  rpc Initialize(InitializeRequest) returns (InitializeResponse);
+  rpc Login(LoginRequest) returns (LoginResponse);
+  rpc Shutdown(google.protobuf.Empty) returns (ShutdownResponse);
+  rpc Version(google.protobuf.Empty) returns (VersionResponse);
+
+  rpc AccountInfo(google.protobuf.Empty) returns (AccountInfoResponse);
+  rpc TerminalInfo(google.protobuf.Empty) returns (TerminalInfoResponse);
+
+  rpc Close (CloseRequest) returns (CloseResponse);
+  rpc Buy (BuyRequest) returns (BuyResponse);
+  rpc Sell (SellRequest) returns (SellResponse);
+}

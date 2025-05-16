@@ -1,0 +1,32 @@
+[build-system]
+#requires = ["setuptools>=61.0", "wheel"]
+#build-backend = "setuptools.build_meta"
+
+requires = ["hatchling >= 1.26"]
+build-backend = "hatchling.build"
+
+
+[project]
+name = "mt5_grpc"
+version = "0.1.0"
+description = "gRPC client for MetaTrader 5 integration"
+#readme = "README.md"
+requires-python = ">=3.7"
+license = { text = "MIT" }
+authors = [
+    { name = "Abbas Allahyari", email = "abbas.allahyari.91@gmail.com" }
+]
+
+dependencies = [
+    "grpcio>=1.71.0",
+    "protobuf>=5.29.4",
+    "MetaTrader5>=5.0.4874",
+]
+
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+#
+[tool.setuptools.packages.find]
+include = ["src"]
