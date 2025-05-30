@@ -3,7 +3,8 @@ import asyncio
 import logging
 
 from mt5_grpc.mt5_grpc_server.configs_manager import ConfigsManager
-from mt5_grpc.mt5_grpc_server.server import create_grpc_server
+from mt5_grpc.mt5_grpc_server.server import create_grpc_server, create_mt5_keepalive
+
 
 # from src.mt5_grpc.mt5_grpc_server.configs_manager import ConfigsManager
 # from src.mt5_grpc.mt5_grpc_server import create_grpc_server
@@ -32,8 +33,11 @@ async def main(args):
     logger = logging.getLogger(__name__)
 
     configs_manager = ConfigsManager('configs.json', args)
-    server = create_grpc_server(configs_manager.get_node_configs())
-    await server.serve()
+    # server = await create_grpc_server(configs_manager.get_node_configs())
+    # await server.serve()
+    configs = configs_manager.get_node_configs()
+    await asyncio.gather(create_grpc_server(configs),
+                         create_mt5_keepalive(configs, configs_manager.configs['keep_alive_interval']))
 
 
 if __name__ == '__main__':

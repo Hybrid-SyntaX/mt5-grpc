@@ -78,17 +78,17 @@ message CopyTicksRangeRequest {
 
 
 message CopyRatesResponse {
-  oneof resp{
-    Rates rates = 1;
-    Error error = 2;
-  }
+
+  Rates rates = 1;
+  optional  Error error = 2;
+
 }
 
 message CopyTicksResponse {
-  oneof resp{
-    Ticks ticks = 1;
-    Error error = 2;
-  }
+
+  Ticks ticks = 1;
+  optional  Error error = 2;
+
 }
 
 message SymbolsGetRequest {
@@ -209,17 +209,13 @@ message SymbolInfoRequest {
 }
 
 message SymbolInfoResponse {
-  oneof resp {
-    SymbolInfo symbol_info = 1;
-    Error error = 2;
-  }
+  SymbolInfo symbol_info = 1;
+  optional  Error error = 2;
 }
 
 message SymbolsTotalResponse {
-  oneof resp {
-    int64 symbols_total = 1;
-    Error error = 2;
-  }
+  int64 symbols_total = 1;
+  optional  Error error = 2;
 }
 
 message SymbolInfoTickRequest {
@@ -227,10 +223,8 @@ message SymbolInfoTickRequest {
 }
 
 message SymbolInfoTickResponse {
-  oneof resp {
-    Tick tick = 1;
-    Error error = 2;
-  }
+  Tick tick = 1;
+  optional  Error error = 2;
 }
 
 message SymbolSelectRequest {
@@ -240,7 +234,7 @@ message SymbolSelectRequest {
 
 message SymbolSelectResponse {
   bool success = 1;
-  Error error = 2;
+  optional  Error error = 2;
 }
 
 // For orders
@@ -318,10 +312,10 @@ message OrderSendRequest {
 
 
 message OrderSendResponse {
-  oneof resp{
-    OrderSendResult order_send_result = 1;
-    Error error = 2;
-  }
+
+  OrderSendResult order_send_result = 1;
+  optional  Error error = 2;
+
 }
 
 // Request and Response messages for OrdersGet
@@ -343,18 +337,15 @@ message OrderCheckRequest {
 
 // Response for order check operation
 message OrderCheckResponse {
-  oneof resp {
-    OrderCheckResult order_check_result = 1;
-    Error error = 2;
-  }
-
+  OrderCheckResult order_check_result = 1;
+  optional  Error error = 2;
 }
 
 message OrdersTotalResponse {
-  oneof resp {
-    int32 total = 1;
-    Error error = 2;
-  }
+
+  int32 total = 1;
+  optional  Error error = 2;
+
 }
 
 message OrderCalcMarginRequest {
@@ -366,10 +357,10 @@ message OrderCalcMarginRequest {
 
 // Response for margin calculation
 message OrderCalcMarginResponse {
-  oneof  resp{
-    double margin = 1;     // Calculated margin value
-    Error error = 2;       // Error information if any
-  }
+
+  double margin = 1;     // Calculated margin value
+  optional  Error error = 2;       // Error information if any
+
 }
 
 // Request for calculating profit
@@ -383,10 +374,10 @@ message OrderCalcProfitRequest {
 
 // Response for profit calculation
 message OrderCalcProfitResponse {
-  oneof  resp{
-    double profit = 1;     // Calculated profit value
-    Error error = 2;       // Error information if any
-  }
+
+  double profit = 1;     // Calculated profit value
+  optional  Error error = 2;       // Error information if any
+
 }
 
 // Positions
@@ -426,10 +417,10 @@ message PositionsGetResponse {
 }
 
 message PositionsTotalResponse {
-  oneof resp {
-    int32 total = 1;
-    Error error = 2;
-  }
+
+  int32 total = 1;
+  optional  Error error = 2;
+
 }
 
 // History Orders
@@ -438,10 +429,10 @@ message HistoryOrdersTotalRequest {
   google.protobuf.Timestamp date_to = 2;
 }
 message HistoryOrdersTotalResponse {
-  oneof resp{
-    int32 total = 1;
-    Error error = 2;
-  }
+
+  int32 total = 1;
+  optional  Error error = 2;
+
 }
 
 message HistoryOrdersGetRequest {
@@ -484,10 +475,10 @@ message HistoryDealsTotalRequest {
   google.protobuf.Timestamp date_to = 2;
 }
 message HistoryDealsTotalResponse {
-  oneof resp{
-    int32 total = 1;
-    Error error = 2;
-  }
+
+  int32 total = 1;
+  optional  Error error = 2;
+
 }
 
 message HistoryDealsGetRequest {
@@ -504,7 +495,7 @@ message HistoryDealsGetResponse {
 
 // Last Error
 message LastErrorResponse {
-  Error error = 1;
+  optional  Error error = 1;
 }
 
 // Market
@@ -520,10 +511,8 @@ message MarketBookAddRequest {
 }
 
 message MarketBookAddResponse {
-  oneof resp {
-    bool success = 1;
-    Error error = 2;
-  }
+  bool success = 1;
+  optional  Error error = 2;
 }
 
 message MarketBookGetRequest {
@@ -540,10 +529,10 @@ message MarketBookReleaseRequest {
 }
 
 message MarketBookReleaseResponse {
-  oneof resp {
-    bool success = 1;
-    Error error = 2;
-  }
+
+  bool success = 1;
+  optional  Error error = 2;
+
 }
 
 // Misc
@@ -555,10 +544,10 @@ message InitializeRequest {
   string password = 4;
 }
 message InitializeResponse {
-  oneof resp {
-    bool success = 1;
-    Error error = 2;
-  }
+
+  bool success = 1;
+  optional  Error error = 2;
+
 }
 
 message LoginRequest {
@@ -567,17 +556,17 @@ message LoginRequest {
   string server = 3;
 }
 message LoginResponse {
-  oneof resp {
-    bool success = 1;
-    Error error = 2;
-  }
+
+  bool success = 1;
+  optional  Error error = 2;
+
 }
 
 message ShutdownResponse {
-  oneof resp {
-    bool success = 1;
-    Error error = 2;
-  }
+
+  bool success = 1;
+  optional  Error error = 2;
+
 }
 
 message Version {
@@ -587,10 +576,10 @@ message Version {
 }
 
 message VersionResponse {
-  oneof resp {
-    Version version = 1;
-    Error error = 2;
-  }
+
+  Version version = 1;
+  optional  Error error = 2;
+
 }
 
 message AccountInfo {
@@ -651,17 +640,17 @@ message TerminalInfo {
 
 
 message AccountInfoResponse {
-  oneof resp {
-    AccountInfo account_info = 1;
-    Error error = 2;
-  }
+
+  AccountInfo account_info = 1;
+  optional  Error error = 2;
+
 }
 
 message TerminalInfoResponse {
-  oneof resp {
-    TerminalInfo terminal_info = 1;
-    Error error = 2;
-  }
+
+  TerminalInfo terminal_info = 1;
+  optional  Error error = 2;
+
 }
 
 message CloseRequest {
@@ -671,10 +660,10 @@ message CloseRequest {
 }
 
 message CloseResponse {
-  oneof resp{
-    OrderSendResult order_send_result = 1;
-    Error error = 2;
-  }
+
+  OrderSendResult order_send_result = 1;
+  optional  Error error = 2;
+
 }
 
 message BuyRequest {
@@ -686,10 +675,10 @@ message BuyRequest {
 }
 
 message BuyResponse {
-  oneof resp{
-    OrderSendResult order_send_result = 1;
-    Error error = 2;
-  }
+
+  OrderSendResult order_send_result = 1;
+  optional  Error error = 2;
+
 }
 
 message SellRequest {
@@ -701,8 +690,8 @@ message SellRequest {
 }
 
 message SellResponse {
-  oneof resp{
-    OrderSendResult order_send_result = 1;
-    Error error = 2;
-  }
+
+  OrderSendResult order_send_result = 1;
+  optional  Error error = 2;
+
 }

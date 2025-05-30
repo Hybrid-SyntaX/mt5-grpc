@@ -1,4 +1,4 @@
-from enum import Enum, IntFlag, IntEnum
+from enum import Enum, IntFlag, IntEnum, auto
 
 
 class TimeFrame(IntEnum):
@@ -320,20 +320,52 @@ class SymbolOptionMode(IntEnum):
     SYMBOL_OPTION_MODE_EUROPEAN = 0
     SYMBOL_OPTION_MODE_AMERICAN = 1
 
-class ErrorCode(IntEnum):
-    RES_S_OK = 1                              # generic success
-    RES_E_FAIL = -1                           # generic fail
-    RES_E_INVALID_PARAMS = -2                # invalid arguments/parameters
-    RES_E_NO_MEMORY = -3                     # no memory condition
-    RES_E_NOT_FOUND = -4                     # no history
-    RES_E_INVALID_VERSION = -5               # invalid version
-    RES_E_AUTH_FAILED = -6                   # authorization failed
-    RES_E_UNSUPPORTED = -7                   # unsupported method
-    RES_E_AUTO_TRADING_DISABLED = -8         # auto-trading disabled
-    RES_E_INTERNAL_FAIL = -10000             # internal IPC general error
-    RES_E_INTERNAL_FAIL_SEND = -10001        # internal IPC send failed
-    RES_E_INTERNAL_FAIL_RECEIVE = -10002     # internal IPC recv failed
-    RES_E_INTERNAL_FAIL_INIT = -10003        # internal IPC initialization fail
-    RES_E_INTERNAL_FAIL_CONNECT = -10004     # internal IPC no ipc
-    RES_E_INTERNAL_FAIL_TIMEOUT = -10005     # internal timeout
 
+class ErrorCode(IntEnum):
+    RES_S_OK = 1  # generic success
+    RES_E_FAIL = -1  # generic fail
+    RES_E_INVALID_PARAMS = -2  # invalid arguments/parameters
+    RES_E_NO_MEMORY = -3  # no memory condition
+    RES_E_NOT_FOUND = -4  # no history
+    RES_E_INVALID_VERSION = -5  # invalid version
+    RES_E_AUTH_FAILED = -6  # authorization failed
+    RES_E_UNSUPPORTED = -7  # unsupported method
+    RES_E_AUTO_TRADING_DISABLED = -8  # auto-trading disabled
+    RES_E_INTERNAL_FAIL = -10000  # internal IPC general error
+    RES_E_INTERNAL_FAIL_SEND = -10001  # internal IPC send failed
+    RES_E_INTERNAL_FAIL_RECEIVE = -10002  # internal IPC recv failed
+    RES_E_INTERNAL_FAIL_INIT = -10003  # internal IPC initialization fail
+    RES_E_INTERNAL_FAIL_CONNECT = -10004  # internal IPC no ipc
+    RES_E_INTERNAL_FAIL_TIMEOUT = -10005  # internal timeout
+
+
+class GRPCMetaTrader5ReturnType(Enum):
+    MT5_DEFAULT = auto()
+    """
+    MT5_DEFAULT:
+    Mimics the default MetaTrader 5 client behavior.
+    Returns the result on success, and None on failure.
+    You must call `last_error()` separately to retrieve the latest `Error`.
+    """
+
+    RESULT = auto()
+    """
+    RESULT:
+    Always returns a `Result` object containing:
+    - `value`: the result if successful
+    - `error`: an `Error` object if the operation failed
+    """
+
+    VALUE_OR_ERROR = auto()
+    """
+    VALUE_OR_ERROR:
+    Returns the result if successful.
+    If the operation fails, returns the `Error` object directly instead of the result.
+    """
+
+    VALUE_AND_ERROR = auto()
+    """
+    VALUE_AND_ERROR:
+    Returns a tuple: (result, Error).
+    Similar to Go-style error handling where the caller checks if `Error.code != 0`.
+    """

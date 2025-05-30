@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 import pytest
 
 from mt5_grpc.core.enums import CopyTicks, OrderType, TradeAction
+from mt5_grpc.core.types import Error
 from tests.util import assert_lists_are_equal, assert_values_are_equal, assert_numpy_ndarray_are_equal
 from tests.integration.base import AbstractMT5TestEnv
 
@@ -246,7 +247,7 @@ class TestMT5Integration(AbstractMT5TestEnv):
         original_result = self.mt5.copy_ticks_from(symbol, from_time, count, flags)
         mt5_client_result = self.mt5_client.copy_ticks_from(symbol, from_time, count, flags)
 
-        assert type(mt5_client_result) is not tuple, f'MT5 Error: {mt5_client_result}'
+        assert type(mt5_client_result) is not Error, f'MT5 Error: {mt5_client_result}'
         assert_numpy_ndarray_are_equal(original_result, mt5_client_result)
 
     def test_copy_ticks_range(self):
@@ -257,7 +258,7 @@ class TestMT5Integration(AbstractMT5TestEnv):
         original_result = self.mt5.copy_ticks_range(symbol, from_time, to_time, flags)
         mt5_client_result = self.mt5_client.copy_ticks_range(symbol, from_time, to_time, flags)
 
-        assert type(mt5_client_result) is not tuple, f'MT5 Error: {mt5_client_result}'
+        assert type(mt5_client_result) is not Error, f'MT5 Error: {mt5_client_result}'
         assert_numpy_ndarray_are_equal(original_result, mt5_client_result)
 
     def test_order_calc_margin(self):
@@ -268,7 +269,7 @@ class TestMT5Integration(AbstractMT5TestEnv):
         original_result = self.mt5.order_calc_margin(action, symbol, volume, price)
         mt5_client_result = self.mt5_client.order_calc_margin(action, symbol, volume, price)
 
-        assert type(mt5_client_result) is not tuple, f'MT5 Error: {mt5_client_result}'
+        assert type(mt5_client_result) is not Error, f'MT5 Error: {mt5_client_result}'
         assert original_result == mt5_client_result
 
     def test_order_calc_profit(self):
@@ -361,7 +362,7 @@ class TestMT5Integration(AbstractMT5TestEnv):
         original_result = self.mt5.Sell('USDJPY', 0.01)
         mt5_client_result = self.mt5_client.Sell('USDJPY', 0.01)
 
-        assert type(mt5_client_result) is not tuple, f'MT5 Error: {mt5_client_result}'
+        assert type(mt5_client_result) is not Error, f'MT5 Error: {mt5_client_result}'
 
         assert_values_are_equal(original_result, mt5_client_result,
                                 exclude=['balance', 'equity', 'margin', 'request', 'ask', 'deal', 'order', 'request_id',

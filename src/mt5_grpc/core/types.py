@@ -1,5 +1,6 @@
+from collections import namedtuple
 from dataclasses import dataclass, field
-from typing import Optional
+from typing import Optional, NamedTuple
 
 from mt5_grpc.core.enums import OrderTypeFilling, OrderTime, TradeAction, BookType, OrderType, TradeReturnCode, \
     PositionType, PositionReason, OrderState, DealEntry, DealType, DealReason, AccountTradeMode, AccountMarginMode, \
@@ -246,10 +247,15 @@ class TradeDeal:
     time_msc: int = 0
 
 
-@dataclass
-class Error:
-    code: ErrorCode = ErrorCode.RES_S_OK
-    message: str = ''
+# @dataclass
+# class Error:
+#     code: ErrorCode = ErrorCode.RES_S_OK
+#     message: str = ''
+#
+
+class Error(NamedTuple):
+    code: ErrorCode | int = ErrorCode.RES_S_OK
+    message: str = 'Success'
 
 
 @dataclass
@@ -319,3 +325,19 @@ class AccountInfo:
     trade_allowed: bool = False
     trade_expert: bool = False
     trade_mode: AccountTradeMode = AccountTradeMode.ACCOUNT_TRADE_MODE_DEMO
+
+
+@dataclass
+class Result:
+    value: any
+    error: Optional[Error] = None
+
+    @property
+    def is_success(self):
+        return self.error is None
+
+
+class Version(NamedTuple):
+    terminal_version: int
+    build: int
+    release_date: str
