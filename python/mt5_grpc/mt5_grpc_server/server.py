@@ -2,8 +2,8 @@ import asyncio
 import logging
 from concurrent import futures
 import grpc
-from src.mt5_grpc.generated_proto import services_pb2_grpc
-from src.mt5_grpc.mt5_grpc_server.services import GRPCMetaTrader5Service
+from ..generated_proto import services_pb2_grpc
+from ..mt5_grpc_server.services import GRPCMetaTrader5Service
 import MetaTrader5 as mt5
 
 

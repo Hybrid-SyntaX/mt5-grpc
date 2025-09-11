@@ -18,7 +18,7 @@ from ..generated_proto.messages_pb2 import CopyRatesRangeRequest, CopyRatesRespo
     MarketBookReleaseResponse, InitializeRequest, InitializeResponse, LoginResponse, LoginRequest, ShutdownResponse, \
     VersionResponse, AccountInfoResponse, TerminalInfoResponse, Version, TerminalInfo, AccountInfo, CloseRequest, \
     CloseResponse, BuyRequest, BuyResponse, SellResponse, SellRequest
-from src.mt5_grpc.util.type_mapping import auto_map
+from ..util.type_mapping import auto_map
 
 
 def extract_kwargs(request, fields):

@@ -172,6 +172,6 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
-/src/mt5_grpc/generated_proto/
+/python/mt5_grpc/generated_proto/
 configs.json
 .idea/

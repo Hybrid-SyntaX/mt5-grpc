@@ -4,8 +4,6 @@ import os
 import MetaTrader5 as mt5
 import grpc
 import pytest
-from sqlalchemy.sql.functions import ReturnTypeFromArgs
-
 from mt5_grpc.core.enums import GRPCMetaTrader5ReturnType
 from mt5_grpc.mt5_grpc_client import GRPCMetaTrader5
 

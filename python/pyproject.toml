@@ -1,7 +1,4 @@
 [build-system]
-#requires = ["setuptools>=61.0", "wheel"]
-#build-backend = "setuptools.build_meta"
-
 requires = ["hatchling >= 1.26"]
 build-backend = "hatchling.build"
 
@@ -30,4 +27,4 @@ classifiers = [
 ]
 #
 [tool.setuptools.packages.find]
-include = ["src"]
+include = ["mt5_grpc"]

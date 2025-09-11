@@ -5,9 +5,6 @@ import logging
 from mt5_grpc.mt5_grpc_server.configs_manager import ConfigsManager
 from mt5_grpc.mt5_grpc_server.server import create_grpc_server, create_mt5_keepalive
 
-
-# from src.mt5_grpc.mt5_grpc_server.configs_manager import ConfigsManager
-# from src.mt5_grpc.mt5_grpc_server import create_grpc_server
 def parse_arguments():
     parser = argparse.ArgumentParser(prog='MetaTrader Service')
     parser.add_argument('-d', '--debug', action='store_true')
