@@ -25,7 +25,8 @@ async def create_grpc_server(_configs):
     host = _configs['server']['host'] if _configs['server']['host'] is not None else "[::]"
     max_workers = _configs['server']['max_workers'] if _configs.get('server').get('max_workers') is not None else 30
     logging.info(f'Max workers: {max_workers}')
-    server = grpc.aio.server(futures.ThreadPoolExecutor(max_workers))
+
+    server = grpc.aio.server(futures.ThreadPoolExecutor(max_workers),compression=grpc.Compression.Gzip)
     services_pb2_grpc.add_MetaTrader5ServiceServicer_to_server(GRPCMetaTrader5Service(_configs['metatrader']), server)
 
     server.add_insecure_port(f"{host}:{port}")
