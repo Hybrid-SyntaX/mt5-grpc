@@ -1,7 +1,0 @@
-go 1.25.1
-
-use (
-	mt5grpc
-	tests
-	examples
-)
