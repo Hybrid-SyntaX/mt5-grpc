@@ -3,7 +3,7 @@ package mt5grpc
 import (
 	"github.com/hybrid-syntax/mt5-grpc/go/mt5grpc/core/enums"
 	core "github.com/hybrid-syntax/mt5-grpc/go/mt5grpc/core/types"
-	pb "github.com/hybrid-syntax/mt5-grpc/go/mt5grpc/generated_proto"
+	"github.com/hybrid-syntax/mt5-grpc/go/mt5grpc/internal/pb"
 	"github.com/jinzhu/copier"
 )
 

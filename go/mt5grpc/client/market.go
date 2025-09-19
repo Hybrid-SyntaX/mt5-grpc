@@ -3,7 +3,7 @@ package client
 import (
 	"github.com/hybrid-syntax/mt5-grpc/go/mt5grpc"
 	"github.com/hybrid-syntax/mt5-grpc/go/mt5grpc/core/types"
-	pb "github.com/hybrid-syntax/mt5-grpc/go/mt5grpc/generated_proto"
+	"github.com/hybrid-syntax/mt5-grpc/go/mt5grpc/internal/pb"
 )
 
 func (c *Client) MarketBookAdd(symbol string) (bool, error) {

@@ -4,7 +4,7 @@ import (
 	"github.com/hybrid-syntax/mt5-grpc/go/mt5grpc"
 	"github.com/hybrid-syntax/mt5-grpc/go/mt5grpc/core/enums"
 	"github.com/hybrid-syntax/mt5-grpc/go/mt5grpc/core/types"
-	pb "github.com/hybrid-syntax/mt5-grpc/go/mt5grpc/generated_proto"
+	"github.com/hybrid-syntax/mt5-grpc/go/mt5grpc/internal/pb"
 	"github.com/jinzhu/copier"
 	"google.golang.org/protobuf/types/known/emptypb"
 )

@@ -1,6 +1,6 @@
 $protoDir = "proto"
 $pythonOutputDir = "python/mt5_grpc/generated_proto"
-$goOutputDir = "go/mt5grpc/generated_proto"
+$goOutputDir = "go/mt5grpc/internal/pb"
 
 $protos = @("enums.proto", "messages.proto", "services.proto")
 

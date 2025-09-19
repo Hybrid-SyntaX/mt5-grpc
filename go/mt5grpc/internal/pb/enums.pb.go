@@ -4,7 +4,7 @@
 // 	protoc        v6.31.1
 // source: enums.proto
 
-package mt5grpcpb
+package pb
 
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
@@ -2002,7 +2002,7 @@ const file_enums_proto_rawDesc = "" +
 	"\x17SYMBOL_OPTION_RIGHT_PUT\x10\x01*T\n" +
 	"\x10SymbolOptionMode\x12\x1f\n" +
 	"\x1bSYMBOL_OPTION_MODE_EUROPEAN\x10\x00\x12\x1f\n" +
-	"\x1bSYMBOL_OPTION_MODE_AMERICAN\x10\x01BHZFgithub.com/hybrid-syntax/mt5-grpc/go/mt5grpc/generated_proto;mt5grpcpbb\x06proto3"
+	"\x1bSYMBOL_OPTION_MODE_AMERICAN\x10\x01B=Z;github.com/hybrid-syntax/mt5-grpc/go/mt5grpc/internal/pb;pbb\x06proto3"
 
 var (
 	file_enums_proto_rawDescOnce sync.Once

@@ -2,7 +2,7 @@ package client
 
 import (
 	"context"
-	pb "github.com/hybrid-syntax/mt5-grpc/go/mt5grpc/generated_proto" // import generated proto
+	"github.com/hybrid-syntax/mt5-grpc/go/mt5grpc/internal/pb" // import generated proto
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/encoding/gzip"
