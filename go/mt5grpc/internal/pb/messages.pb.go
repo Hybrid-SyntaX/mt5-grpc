@@ -4,7 +4,7 @@
 // 	protoc        v6.31.1
 // source: messages.proto
 
-package mt5grpcpb
+package pb
 
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
@@ -6653,7 +6653,7 @@ const file_messages_proto_rawDesc = "" +
 	"\fSellResponse\x12<\n" +
 	"\x11order_send_result\x18\x01 \x01(\v2\x10.OrderSendResultR\x0forderSendResult\x12!\n" +
 	"\x05error\x18\x02 \x01(\v2\x06.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
-	"\x06_errorBHZFgithub.com/hybrid-syntax/mt5-grpc/go/mt5grpc/generated_proto;mt5grpcpbb\x06proto3"
+	"\x06_errorB=Z;github.com/hybrid-syntax/mt5-grpc/go/mt5grpc/internal/pb;pbb\x06proto3"
 
 var (
 	file_messages_proto_rawDescOnce sync.Once

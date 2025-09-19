@@ -4,7 +4,7 @@
 // - protoc             v6.31.1
 // source: services.proto
 
-package mt5grpcpb
+package pb
 
 import (
 	context "context"

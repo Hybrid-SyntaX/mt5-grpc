@@ -4,7 +4,7 @@
 // 	protoc        v6.31.1
 // source: services.proto
 
-package mt5grpcpb
+package pb
 
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
@@ -65,7 +65,7 @@ const file_services_proto_rawDesc = "" +
 	"\fTerminalInfo\x12\x16.google.protobuf.Empty\x1a\x15.TerminalInfoResponse\x12&\n" +
 	"\x05Close\x12\r.CloseRequest\x1a\x0e.CloseResponse\x12 \n" +
 	"\x03Buy\x12\v.BuyRequest\x1a\f.BuyResponse\x12#\n" +
-	"\x04Sell\x12\f.SellRequest\x1a\r.SellResponseBHZFgithub.com/hybrid-syntax/mt5-grpc/go/mt5grpc/generated_proto;mt5grpcpbb\x06proto3"
+	"\x04Sell\x12\f.SellRequest\x1a\r.SellResponseB=Z;github.com/hybrid-syntax/mt5-grpc/go/mt5grpc/internal/pb;pbb\x06proto3"
 
 var file_services_proto_goTypes = []any{
 	(*CopyRatesRangeRequest)(nil),      // 0: CopyRatesRangeRequest
