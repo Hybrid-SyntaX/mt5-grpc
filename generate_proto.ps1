@@ -1,15 +1,16 @@
 $protoDir = "proto"
-$outputDir = "src/mt5_grpc/generated_proto"
+$pythonOutputDir = "python/mt5_grpc/generated_proto"
+$goOutputDir = "go/mt5grpc/generated_proto"
 
-function Generate-Proto-Files{
+$protos = @("enums.proto", "messages.proto", "services.proto")
+
+function Generate-Python-Proto-Files{
     param (
         [string]$directory
     )
 
     # Ensure output dirs exist
     New-Item -ItemType Directory -Force -Path $directory | Out-Null
-
-    $protos = @("enums.proto", "messages.proto", "services.proto")
 
     Write-Host "Generating Python code..."
     foreach ($proto in $protos) {
@@ -18,7 +19,22 @@ function Generate-Proto-Files{
 
 }
 
-function Fix-Imports {
+function Generate-Go-Proto-Files{
+    param (
+        [string]$directory
+    )
+
+    # Ensure output dirs exist
+    New-Item -ItemType Directory -Force -Path $directory | Out-Null
+
+    Write-Host "Generating Go code..."
+        foreach ($proto in $protos) {
+            protoc  --proto_path=$protoDir  --go_out=$directory  --go_opt=paths=source_relative  --go-grpc_out=$directory  --go-grpc_opt=paths=source_relative  "$protoDir/$proto"
+    }
+
+}
+
+function Fix-Python-Imports {
     param (
         [string]$directory
     )
@@ -36,11 +52,13 @@ function Fix-Imports {
     }
 }
 
-Write-Host "Generating proto files..."
-Generate-Proto-Files $outputDir
+Write-Host "Generating python proto files..."
+Generate-Python-Proto-Files $pythonOutputDir
 
-Write-Host "Fixing imports..."
-Fix-Imports -directory $outputDir
+Write-Host "Fixing python imports..."
+Fix-Python-Imports -directory $pythonOutputDir
 
+Write-Host "Generating go proto files..."
+Generate-Go-Proto-Files $goOutputDir
 
 Write-Host "Done!"

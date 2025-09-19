@@ -1,4 +1,5 @@
 syntax = "proto3";
+option go_package = "github.com/hybrid-syntax/mt5-grpc/go/mt5grpc/generated_proto;mt5grpcpb";
 
 enum TimeFrame {
   TIMEFRAME_UNSPECIFIED = 0;

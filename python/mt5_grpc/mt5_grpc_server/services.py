@@ -255,20 +255,20 @@ class GRPCMetaTrader5Service(services_pb2_grpc.MetaTrader5ServiceServicer):
 
     def PositionsGet(self, request: PositionsGetRequest, context) -> PositionsGetResponse:
         if request.HasField('ticket'):
-            mt5_orders = mt5.positions_get(ticket=request.ticket)
+            mt5_positions = mt5.positions_get(ticket=request.ticket)
         elif request.HasField('symbol'):
-            mt5_orders = mt5.positions_get(symbol=request.symbol)
+            mt5_positions = mt5.positions_get(symbol=request.symbol)
         elif request.HasField('group'):
-            mt5_orders = mt5.positions_get(group=request.group)
+            mt5_positions = mt5.positions_get(group=request.group)
         else:
-            mt5_orders = mt5.positions_get()
+            mt5_positions = mt5.positions_get()
 
-        if mt5_orders is None:
+        if mt5_positions is None:
             return PositionsGetResponse(error=self.make_error_message())
 
         response = PositionsGetResponse(error=self.make_error_message())
 
-        orders = list(map(lambda o: auto_map(o, messages_pb2.TradePosition, 'left'), mt5_orders))
+        orders = list(map(lambda o: auto_map(o, messages_pb2.TradePosition, 'left'), mt5_positions))
         response.positions.extend(orders)
 
         return response
