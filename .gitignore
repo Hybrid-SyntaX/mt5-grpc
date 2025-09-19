@@ -175,5 +175,3 @@ cython_debug/
 /python/mt5_grpc/generated_proto/
 configs.json
 .idea/
-
-/go/mt5grpc/generated_proto/
