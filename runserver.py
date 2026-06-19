@@ -1,7 +1,9 @@
 import argparse
 import asyncio
+import importlib
 import logging
 
+from mt5_grpc.mocks.fake_mt5 import FakeMT5
 from mt5_grpc.mt5_grpc_server.configs_manager import ConfigsManager
 from mt5_grpc.mt5_grpc_server.server import create_grpc_server, create_mt5_keepalive
 
@@ -21,6 +23,7 @@ def parse_arguments():
     configs_group = parser.add_mutually_exclusive_group(required=False)
     configs_group.add_argument('-n', '--node-name', type=str, help='Node name')
     configs_group.add_argument('-i', '--node-index', type=int, help='Node index')
+    configs_group.add_argument('-f', '--fake', action='store_true',help='Fake server')
 
     return parser.parse_args()
 
@@ -33,8 +36,10 @@ async def main(args):
     # server = await create_grpc_server(configs_manager.get_node_configs())
     # await server.serve()
     configs = configs_manager.get_node_configs()
-    await asyncio.gather(create_grpc_server(configs),
-                         create_mt5_keepalive(configs, configs_manager.configs['keep_alive_interval']))
+    mt5 = importlib.import_module('MetaTrader5') if not args.fake else FakeMT5()
+    mt5.initialize(**configs['metatrader'])
+    await asyncio.gather(create_grpc_server(configs,mt5),
+                         create_mt5_keepalive(configs, mt5,configs_manager.configs['keep_alive_interval']))
 
 
 if __name__ == '__main__':

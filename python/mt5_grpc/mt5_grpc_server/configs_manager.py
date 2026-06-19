@@ -10,6 +10,8 @@ class ConfigsManager:
             self.configs = configs
 
     def get_node_configs(self):
+        if self.args.fake:
+            self.args.node_name = 'fake'
         if self.args.node_index is not None:
             node_configs = self.configs['nodes'][self.args.node_index]
 

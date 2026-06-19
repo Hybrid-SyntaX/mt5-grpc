@@ -8,7 +8,7 @@ from mt5_grpc.core.enums import OrderTypeFilling, OrderTime, TradeAction, BookTy
     SymbolCalcMode, SymbolChartMode, ErrorCode
 
 
-# @dataclass
+@dataclass
 class SymbolInfo:
     custom: bool = False  # Boolean Properties
     select: bool = False
@@ -114,7 +114,7 @@ class SymbolInfo:
     def __str__(self):
         return self.name
 
-
+@dataclass
 class Tick:
     time: int = 0
     bid: float = 0.0

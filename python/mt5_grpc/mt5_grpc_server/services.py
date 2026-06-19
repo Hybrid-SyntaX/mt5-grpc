@@ -1,6 +1,6 @@
 import logging
 
-import MetaTrader5 as mt5
+#import MetaTrader5 as mt5
 from google.protobuf.empty_pb2 import Empty
 from google.protobuf.json_format import MessageToDict
 
@@ -37,10 +37,11 @@ def extract_kwargs(request, fields):
 
 
 class GRPCMetaTrader5Service(services_pb2_grpc.MetaTrader5ServiceServicer):
-    def __init__(self, configs):
-        mt5.initialize(**configs)
-        terminal_info = mt5.terminal_info()
-        account_info_ = mt5.account_info()
+    def __init__(self, mt5_module):
+        self.mt5 = mt5_module
+        #self.mt5.initialize(**configs)
+        terminal_info = self.mt5.terminal_info()
+        account_info_ = self.mt5.account_info()
         logging.info(f'MT5 Terminal Path: {terminal_info.path}')
         logging.info(f'Account Info: (login={account_info_.login},server={account_info_.server})')
 
@@ -48,7 +49,7 @@ class GRPCMetaTrader5Service(services_pb2_grpc.MetaTrader5ServiceServicer):
         date_to = request.date_to.ToDatetime()
         date_from = request.date_from.ToDatetime()
 
-        rates = mt5.copy_rates_range(request.symbol, request.timeframe, date_from, date_to)
+        rates = self.mt5.copy_rates_range(request.symbol, request.timeframe, date_from, date_to)
 
         response = CopyRatesResponse(
             rates=Rates(),
@@ -66,7 +67,7 @@ class GRPCMetaTrader5Service(services_pb2_grpc.MetaTrader5ServiceServicer):
         count = request.count
         date_from = request.date_from.ToDatetime()
 
-        rates = mt5.copy_rates_from(request.symbol, request.timeframe, date_from, count)
+        rates = self.mt5.copy_rates_from(request.symbol, request.timeframe, date_from, count)
 
         response = CopyRatesResponse(
             rates=Rates(),
@@ -84,7 +85,7 @@ class GRPCMetaTrader5Service(services_pb2_grpc.MetaTrader5ServiceServicer):
         count = request.count
         start_pos = request.start_pos
 
-        rates = mt5.copy_rates_from_pos(request.symbol, request.timeframe, start_pos, count)
+        rates = self.mt5.copy_rates_from_pos(request.symbol, request.timeframe, start_pos, count)
 
         response = CopyRatesResponse(
             rates=Rates(),
@@ -103,7 +104,7 @@ class GRPCMetaTrader5Service(services_pb2_grpc.MetaTrader5ServiceServicer):
         date_from = request.date_from.ToDatetime()
         flags = request.flags
 
-        ticks = mt5.copy_ticks_from(request.symbol, date_from, count, flags)
+        ticks = self.mt5.copy_ticks_from(request.symbol, date_from, count, flags)
 
         response = CopyTicksResponse(
             ticks=Ticks(),
@@ -122,7 +123,7 @@ class GRPCMetaTrader5Service(services_pb2_grpc.MetaTrader5ServiceServicer):
         date_to = request.date_to.ToDatetime()
         flags = request.flags
 
-        ticks = mt5.copy_ticks_range(request.symbol, date_from, date_to, flags)
+        ticks = self.mt5.copy_ticks_range(request.symbol, date_from, date_to, flags)
 
         response = CopyTicksResponse(
             ticks=Ticks(),
@@ -138,7 +139,7 @@ class GRPCMetaTrader5Service(services_pb2_grpc.MetaTrader5ServiceServicer):
 
     # Symbols funcs
     def SymbolsGet(self, request: SymbolsGetRequest, context) -> SymbolsGetResponse:
-        symbols = mt5.symbols_get(request.group)
+        symbols = self.mt5.symbols_get(request.group)
         if symbols is None or len(symbols) == 0:
             return SymbolsGetResponse(error=self.make_error_message())
 
@@ -149,7 +150,7 @@ class GRPCMetaTrader5Service(services_pb2_grpc.MetaTrader5ServiceServicer):
         return response
 
     def SymbolInfo(self, request: SymbolInfoRequest, context) -> SymbolInfoResponse:
-        symbol_info = mt5.symbol_info(request.symbol)
+        symbol_info = self.mt5.symbol_info(request.symbol)
         if symbol_info is None:
             return SymbolInfoResponse(error=self.make_error_message())
 
@@ -158,7 +159,7 @@ class GRPCMetaTrader5Service(services_pb2_grpc.MetaTrader5ServiceServicer):
         return response
 
     def SymbolsTotal(self, request: Empty, context) -> SymbolsTotalResponse:
-        symbols_total = mt5.symbols_total()
+        symbols_total = self.mt5.symbols_total()
         if symbols_total is None:
             return SymbolsTotalResponse(error=self.make_error_message())
 
@@ -167,7 +168,7 @@ class GRPCMetaTrader5Service(services_pb2_grpc.MetaTrader5ServiceServicer):
         return response
 
     def SymbolInfoTick(self, request: SymbolInfoTickRequest, context) -> SymbolInfoTickResponse:
-        symbol_info_tick = mt5.symbol_info_tick(request.symbol)
+        symbol_info_tick = self.mt5.symbol_info_tick(request.symbol)
         if symbol_info_tick is None:
             return SymbolInfoTickResponse(error=self.make_error_message())
 
@@ -177,7 +178,7 @@ class GRPCMetaTrader5Service(services_pb2_grpc.MetaTrader5ServiceServicer):
         return response
 
     def SymbolSelect(self, request: SymbolSelectRequest, context) -> SymbolSelectResponse:
-        result = mt5.symbol_select(request.symbol)
+        result = self.mt5.symbol_select(request.symbol)
         if result is None:
             return SymbolSelectResponse(error=self.make_error_message())
 
@@ -187,7 +188,7 @@ class GRPCMetaTrader5Service(services_pb2_grpc.MetaTrader5ServiceServicer):
 
     def OrderSend(self, request: OrderSendRequest, context) -> OrderSendResponse:
         trade_request_dict = MessageToDict(request.trade_request, use_integers_for_enums=True)
-        result = mt5.order_send(trade_request_dict)
+        result = self.mt5.order_send(trade_request_dict)
         if result is None:
             return OrderSendResponse(error=self.make_error_message())
 
@@ -199,7 +200,7 @@ class GRPCMetaTrader5Service(services_pb2_grpc.MetaTrader5ServiceServicer):
 
     def OrderCheck(self, request: OrderCheckRequest, context) -> OrderCheckResponse:
         trade_request_dict = MessageToDict(request.trade_request, use_integers_for_enums=True)
-        result = mt5.order_check(trade_request_dict)
+        result = self.mt5.order_check(trade_request_dict)
         if result is None:
             return OrderCheckResponse(error=self.make_error_message())
 
@@ -210,7 +211,7 @@ class GRPCMetaTrader5Service(services_pb2_grpc.MetaTrader5ServiceServicer):
                                   error=self.make_error_message())
 
     def OrdersTotal(self, request: Empty, context) -> OrdersTotalResponse:
-        orders_total = mt5.orders_total()
+        orders_total = self.mt5.orders_total()
         if orders_total is None:
             return OrdersTotalResponse(error=self.make_error_message())
 
@@ -218,14 +219,14 @@ class GRPCMetaTrader5Service(services_pb2_grpc.MetaTrader5ServiceServicer):
                                    error=self.make_error_message())
 
     def OrderCalcMargin(self, request: OrderCalcMarginRequest, context) -> OrderCalcMarginResponse:
-        margin = mt5.order_calc_margin(request.action, request.symbol, request.volume, request.price)
+        margin = self.mt5.order_calc_margin(request.action, request.symbol, request.volume, request.price)
         if margin is None:
             return OrderCalcMarginResponse(error=self.make_error_message())
 
         return OrderCalcMarginResponse(margin=margin, error=self.make_error_message())
 
     def OrderCalcProfit(self, request: OrderCalcProfitRequest, context) -> OrderCalcProfitResponse:
-        profit = mt5.order_calc_profit(request.action, request.symbol, request.volume, request.price_open,
+        profit = self.mt5.order_calc_profit(request.action, request.symbol, request.volume, request.price_open,
                                        request.price_close)
         if profit is None:
             return OrderCalcProfitResponse(error=self.make_error_message())
@@ -235,13 +236,13 @@ class GRPCMetaTrader5Service(services_pb2_grpc.MetaTrader5ServiceServicer):
 
     def OrdersGet(self, request: OrdersGetRequest, context) -> OrdersGetResponse:
         if request.HasField('ticket'):
-            mt5_orders = mt5.orders_get(ticket=request.ticket)
+            mt5_orders = self.mt5.orders_get(ticket=request.ticket)
         elif request.HasField('symbol'):
-            mt5_orders = mt5.orders_get(symbol=request.symbol)
+            mt5_orders = self.mt5.orders_get(symbol=request.symbol)
         elif request.HasField('group'):
-            mt5_orders = mt5.orders_get(group=request.group)
+            mt5_orders = self.mt5.orders_get(group=request.group)
         else:
-            mt5_orders = mt5.orders_get()
+            mt5_orders = self.mt5.orders_get()
 
         if mt5_orders is None:
             return OrdersGetResponse(error=self.make_error_message())
@@ -255,13 +256,13 @@ class GRPCMetaTrader5Service(services_pb2_grpc.MetaTrader5ServiceServicer):
 
     def PositionsGet(self, request: PositionsGetRequest, context) -> PositionsGetResponse:
         if request.HasField('ticket'):
-            mt5_positions = mt5.positions_get(ticket=request.ticket)
+            mt5_positions = self.mt5.positions_get(ticket=request.ticket)
         elif request.HasField('symbol'):
-            mt5_positions = mt5.positions_get(symbol=request.symbol)
+            mt5_positions = self.mt5.positions_get(symbol=request.symbol)
         elif request.HasField('group'):
-            mt5_positions = mt5.positions_get(group=request.group)
+            mt5_positions = self.mt5.positions_get(group=request.group)
         else:
-            mt5_positions = mt5.positions_get()
+            mt5_positions = self.mt5.positions_get()
 
         if mt5_positions is None:
             return PositionsGetResponse(error=self.make_error_message())
@@ -274,7 +275,7 @@ class GRPCMetaTrader5Service(services_pb2_grpc.MetaTrader5ServiceServicer):
         return response
 
     def PositionsTotal(self, request: Empty, context) -> PositionsTotalResponse:
-        position_total = mt5.positions_total()
+        position_total = self.mt5.positions_total()
         if position_total is None:
             return PositionsTotalResponse(error=self.make_error_message())
 
@@ -282,7 +283,7 @@ class GRPCMetaTrader5Service(services_pb2_grpc.MetaTrader5ServiceServicer):
 
     def HistoryOrdersTotal(self, request: HistoryOrdersTotalRequest, context) -> HistoryOrdersTotalResponse:
 
-        orders_total = mt5.history_orders_total(request.date_from.ToDatetime(),
+        orders_total = self.mt5.history_orders_total(request.date_from.ToDatetime(),
                                                 request.date_to.ToDatetime())
         if orders_total is None:
             return HistoryOrdersTotalResponse(error=self.make_error_message())
@@ -291,13 +292,13 @@ class GRPCMetaTrader5Service(services_pb2_grpc.MetaTrader5ServiceServicer):
 
     def HistoryOrdersGet(self, request: HistoryOrdersGetRequest, context) -> HistoryOrdersGetResponse:
         if request.HasField('ticket'):
-            mt5_orders = mt5.history_orders_get(ticket=request.ticket)
+            mt5_orders = self.mt5.history_orders_get(ticket=request.ticket)
         elif request.HasField('position'):
-            mt5_orders = mt5.history_orders_get(position=request.position)
+            mt5_orders = self.mt5.history_orders_get(position=request.position)
         elif request.HasField('group'):
-            mt5_orders = mt5.history_orders_get(group=request.group)
+            mt5_orders = self.mt5.history_orders_get(group=request.group)
         else:
-            mt5_orders = mt5.history_orders_get(request.date_from.ToDatetime(), request.date_to.ToDatetime())
+            mt5_orders = self.mt5.history_orders_get(request.date_from.ToDatetime(), request.date_to.ToDatetime())
 
         if mt5_orders is None:
             return HistoryOrdersGetResponse(error=self.make_error_message())
@@ -310,7 +311,7 @@ class GRPCMetaTrader5Service(services_pb2_grpc.MetaTrader5ServiceServicer):
         return response
 
     def HistoryDealsTotal(self, request: HistoryDealsTotalRequest, context) -> HistoryDealsTotalResponse:
-        deals_total = mt5.history_deals_total(request.date_from.ToDatetime(),
+        deals_total = self.mt5.history_deals_total(request.date_from.ToDatetime(),
                                               request.date_to.ToDatetime())
         if deals_total is None:
             return HistoryDealsTotalResponse(error=self.make_error_message())
@@ -319,13 +320,13 @@ class GRPCMetaTrader5Service(services_pb2_grpc.MetaTrader5ServiceServicer):
 
     def HistoryDealsGet(self, request: HistoryDealsGetRequest, context) -> HistoryDealsGetResponse:
         if request.HasField('ticket'):
-            mt5_deals = mt5.history_deals_get(ticket=request.ticket)
+            mt5_deals = self.mt5.history_deals_get(ticket=request.ticket)
         elif request.HasField('position'):
-            mt5_deals = mt5.history_deals_get(position=request.position)
+            mt5_deals = self.mt5.history_deals_get(position=request.position)
         elif request.HasField('group'):
-            mt5_deals = mt5.history_deals_get(group=request.group)
+            mt5_deals = self.mt5.history_deals_get(group=request.group)
         else:
-            mt5_deals = mt5.history_deals_get(request.date_from.ToDatetime(), request.date_to.ToDatetime())
+            mt5_deals = self.mt5.history_deals_get(request.date_from.ToDatetime(), request.date_to.ToDatetime())
 
         if mt5_deals is None:
             return HistoryDealsGetResponse(error=self.make_error_message())
@@ -338,12 +339,12 @@ class GRPCMetaTrader5Service(services_pb2_grpc.MetaTrader5ServiceServicer):
         return response
 
     def LastError(self, request: Empty, context) -> LastErrorResponse:
-        code, message = mt5.last_error()
+        code, message = self.mt5.last_error()
         error = Error(code=code, message=message)
         return LastErrorResponse(error=error)
 
     def MarketBookAdd(self, request: MarketBookAddRequest, context) -> MarketBookAddResponse:
-        result = mt5.market_book_add(request.symbol)
+        result = self.mt5.market_book_add(request.symbol)
 
         if result is None:
             return MarketBookAddResponse(error=self.make_error_message())
@@ -352,7 +353,7 @@ class GRPCMetaTrader5Service(services_pb2_grpc.MetaTrader5ServiceServicer):
         return response
 
     def MarketBookGet(self, request: MarketBookGetRequest, context) -> MarketBookGetResponse:
-        mt5_book_infos = mt5.market_book_get(request.symbol)
+        mt5_book_infos = self.mt5.market_book_get(request.symbol)
 
         if mt5_book_infos is None:
             return MarketBookGetResponse(error=self.make_error_message())
@@ -365,7 +366,7 @@ class GRPCMetaTrader5Service(services_pb2_grpc.MetaTrader5ServiceServicer):
         return response
 
     def MarketBookRelease(self, request: MarketBookReleaseRequest, context) -> MarketBookReleaseResponse:
-        result = mt5.market_book_release(request.symbol)
+        result = self.mt5.market_book_release(request.symbol)
 
         if result is None:
             return MarketBookReleaseResponse(error=self.make_error_message())
@@ -374,7 +375,7 @@ class GRPCMetaTrader5Service(services_pb2_grpc.MetaTrader5ServiceServicer):
         return response
 
     def Initialize(self, request: InitializeRequest, context) -> InitializeResponse:
-        result = mt5.initialize(path=request.path, login=request.login, server=request.server,
+        result = self.mt5.initialize(path=request.path, login=request.login, server=request.server,
                                 password=request.password)
 
         if result is None:
@@ -384,7 +385,7 @@ class GRPCMetaTrader5Service(services_pb2_grpc.MetaTrader5ServiceServicer):
         return response
 
     def Login(self, request: LoginRequest, context) -> LoginResponse:
-        result = mt5.login(request.login, server=request.server, password=request.password)
+        result = self.mt5.login(request.login, server=request.server, password=request.password)
 
         if result is None:
             return LoginResponse(error=self.make_error_message())
@@ -393,7 +394,7 @@ class GRPCMetaTrader5Service(services_pb2_grpc.MetaTrader5ServiceServicer):
         return response
 
     def Shutdown(self, request: Empty, context) -> ShutdownResponse:
-        result = mt5.shutdown()
+        result = self.mt5.shutdown()
 
         if result is None:
             return ShutdownResponse(error=self.make_error_message())
@@ -402,7 +403,7 @@ class GRPCMetaTrader5Service(services_pb2_grpc.MetaTrader5ServiceServicer):
         return response
 
     def Version(self, request: Empty, context) -> VersionResponse:
-        result = mt5.version()
+        result = self.mt5.version()
 
         if result is None:
             return VersionResponse(error=self.make_error_message())
@@ -414,7 +415,7 @@ class GRPCMetaTrader5Service(services_pb2_grpc.MetaTrader5ServiceServicer):
         return response
 
     def AccountInfo(self, request: Empty, context) -> AccountInfoResponse:
-        result = mt5.account_info()
+        result = self.mt5.account_info()
 
         if result is None:
             return AccountInfoResponse(error=self.make_error_message())
@@ -425,7 +426,7 @@ class GRPCMetaTrader5Service(services_pb2_grpc.MetaTrader5ServiceServicer):
         return response
 
     def TerminalInfo(self, request: Empty, context) -> TerminalInfoResponse:
-        result = mt5.terminal_info()
+        result = self.mt5.terminal_info()
 
         if result is None:
             return TerminalInfoResponse(error=self.make_error_message())
@@ -437,7 +438,7 @@ class GRPCMetaTrader5Service(services_pb2_grpc.MetaTrader5ServiceServicer):
 
     def Close(self, request: CloseRequest, context) -> CloseResponse:
         kwargs = extract_kwargs(request, ['comment', 'ticket'])
-        result = mt5.Close(request.symbol, **kwargs)
+        result = self.mt5.Close(request.symbol, **kwargs)
 
         if result is None:
             return CloseResponse(error=self.make_error_message())
@@ -452,7 +453,7 @@ class GRPCMetaTrader5Service(services_pb2_grpc.MetaTrader5ServiceServicer):
 
     def Buy(self, request: BuyRequest, context) -> BuyResponse:
         kwargs = extract_kwargs(request, ['price', 'comment', 'ticket'])
-        result = mt5.Buy(request.symbol, request.volume, **kwargs)
+        result = self.mt5.Buy(request.symbol, request.volume, **kwargs)
 
         if result is None:
             return BuyResponse(error=self.make_error_message())
@@ -467,7 +468,7 @@ class GRPCMetaTrader5Service(services_pb2_grpc.MetaTrader5ServiceServicer):
 
     def Sell(self, request: SellRequest, context) -> SellResponse:
         kwargs = extract_kwargs(request, ['price', 'comment', 'ticket'])
-        result = mt5.Sell(request.symbol, request.volume, **kwargs)
+        result = self.mt5.Sell(request.symbol, request.volume, **kwargs)
 
         if result is None:
             return SellResponse(error=self.make_error_message())
@@ -503,7 +504,7 @@ class GRPCMetaTrader5Service(services_pb2_grpc.MetaTrader5ServiceServicer):
         grpc_ticks.volume_real.extend(mt5_ticks['volume_real'])
 
     def make_error_message(self):
-        error = mt5.last_error()
+        error = self.mt5.last_error()
         return Error(
             code=error[0],
             message=error[1]
