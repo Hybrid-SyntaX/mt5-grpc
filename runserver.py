@@ -1,7 +1,11 @@
 import argparse
 import asyncio
+import os
+import sys
+from datetime import datetime
 import importlib
 import logging
+from logging.handlers import RotatingFileHandler
 
 from mt5_grpc.mocks.fake_mt5 import FakeMT5
 from mt5_grpc.mt5_grpc_server.configs_manager import ConfigsManager
@@ -28,9 +32,29 @@ def parse_arguments():
     return parser.parse_args()
 
 
+
+def setup_logging(name):
+    if not os.path.exists('logs'):
+        os.makedirs('logs')
+
+    timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+    log_filename = f'logs/{timestamp}-{name}.log'
+
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s - %(levelname)s - %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S",
+        handlers=
+        [
+            RotatingFileHandler(log_filename,
+                                mode='a',
+                                maxBytes=50 * 1024 * 1024,
+                                backupCount=1),
+            logging.StreamHandler(stream=sys.stdout)
+        ]
+    )
+
 async def main(args):
-    logging.basicConfig(level=logging.INFO)
-    logger = logging.getLogger(__name__)
 
     configs_manager = ConfigsManager('configs.json', args)
     # server = await create_grpc_server(configs_manager.get_node_configs())
@@ -44,4 +68,5 @@ async def main(args):
 
 if __name__ == '__main__':
     input_args = parse_arguments()
+    setup_logging(input_args.node_name)
     asyncio.run(main(input_args))

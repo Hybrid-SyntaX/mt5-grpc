@@ -2,12 +2,6 @@
 import logging
 from functools import wraps
 
-# --------------------------------------------------------------------
-# 1️⃣  Configure a module‑level logger (you can tweak level / handler)
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s %(levelname)-8s [%(module)s:%(lineno)d] %(message)s",
-)
 log = logging.getLogger(__name__)
 
 # --------------------------------------------------------------------
