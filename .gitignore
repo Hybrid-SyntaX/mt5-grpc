@@ -175,3 +175,4 @@ cython_debug/
 /python/mt5_grpc/generated_proto/
 configs.json
 .idea/
+runserver.bat
