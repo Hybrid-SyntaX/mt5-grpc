@@ -360,6 +360,49 @@ const (
 	DealType_DEAL_TAX                           DealType = 17
 )
 
+func (d DealType) String() string {
+	switch d {
+	case DealType_DEAL_TYPE_BUY:
+		return "BUY"
+	case DealType_DEAL_TYPE_SELL:
+		return "SELL"
+	case DealType_DEAL_TYPE_BALANCE:
+		return "BALANCE"
+	case DealType_DEAL_TYPE_CREDIT:
+		return "CREDIT"
+	case DealType_DEAL_TYPE_CHARGE:
+		return "CHARGE"
+	case DealType_DEAL_TYPE_CORRECTION:
+		return "CORRECTION"
+	case DealType_DEAL_TYPE_BONUS:
+		return "BONUS"
+	case DealType_DEAL_TYPE_COMMISSION:
+		return "COMMISSION"
+	case DealType_DEAL_TYPE_COMMISSION_DAILY:
+		return "COMMISSION_DAILY"
+	case DealType_DEAL_TYPE_COMMISSION_MONTHLY:
+		return "COMMISSION_MONTHLY"
+	case DealType_DEAL_TYPE_COMMISSION_AGENT_DAILY:
+		return "COMMISSION_AGENT_DAILY"
+	case DealType_DEAL_TYPE_COMMISSION_AGENT_MONTHLY:
+		return "COMMISSION_AGENT_MONTHLY"
+	case DealType_DEAL_TYPE_INTEREST:
+		return "INTEREST"
+	case DealType_DEAL_TYPE_BUY_CANCELED:
+		return "BUY_CANCELED"
+	case DealType_DEAL_TYPE_SELL_CANCELED:
+		return "SELL_CANCELED"
+	case DealType_DEAL_DIVIDEND:
+		return "DIVIDEND"
+	case DealType_DEAL_DIVIDEND_FRANKED:
+		return "DIVIDEND_FRANKED"
+	case DealType_DEAL_TAX:
+		return "TAX"
+	default:
+		return fmt.Sprintf("UNKNOWN_DEAL_TYPE(%d)", d)
+	}
+}
+
 type DealEntry int32
 
 const (
@@ -384,6 +427,33 @@ const (
 	DealReason_DEAL_REASON_VMARGIN  DealReason = 8
 	DealReason_DEAL_REASON_SPLIT    DealReason = 9
 )
+
+func (d DealReason) String() string {
+	switch d {
+	case DealReason_DEAL_REASON_CLIENT:
+		return "CLIENT"
+	case DealReason_DEAL_REASON_MOBILE:
+		return "MOBILE"
+	case DealReason_DEAL_REASON_WEB:
+		return "WEB"
+	case DealReason_DEAL_REASON_EXPERT:
+		return "EXPERT"
+	case DealReason_DEAL_REASON_SL:
+		return "SL"
+	case DealReason_DEAL_REASON_TP:
+		return "TP"
+	case DealReason_DEAL_REASON_SO:
+		return "SO"
+	case DealReason_DEAL_REASON_ROLLOVER:
+		return "ROLLOVER"
+	case DealReason_DEAL_REASON_VMARGIN:
+		return "VMARGIN"
+	case DealReason_DEAL_REASON_SPLIT:
+		return "SPLIT"
+	default:
+		return fmt.Sprintf("UNKNOWN_REASON(%d)", d)
+	}
+}
 
 type BookType int32
 
