@@ -8,7 +8,7 @@ import (
 	"google.golang.org/protobuf/types/known/emptypb"
 )
 
-func (c *Client) SymbolsGet(group ...string) (*[]types.SymbolInfo, error) {
+func (c *Client) SymbolsGet(group ...string) ([]types.SymbolInfo, error) {
 
 	grp, err := utils.SetOptional("", group)
 	if err != nil {
@@ -20,9 +20,11 @@ func (c *Client) SymbolsGet(group ...string) (*[]types.SymbolInfo, error) {
 		return nil, err
 	}
 
-	return mt5grpc.ParseMT5GRPCResponse[[]*pb.SymbolInfo, []types.SymbolInfo](resp, func() []*pb.SymbolInfo {
-		return resp.GetSymbols()
-	})
+	return mt5grpc.DereferenceListResponse(
+		mt5grpc.ParseMT5GRPCResponse[[]*pb.SymbolInfo, []types.SymbolInfo](resp, func() []*pb.SymbolInfo {
+			return resp.GetSymbols()
+		}),
+	)
 }
 
 func (c *Client) SymbolInfo(symbol string) (*types.SymbolInfo, error) {

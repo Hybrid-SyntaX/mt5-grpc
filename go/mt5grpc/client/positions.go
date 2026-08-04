@@ -19,7 +19,7 @@ func PositionsGetWithTicket(ticket int64) PositionsGetOption {
 	return func(r *pb.PositionsGetRequest) { r.Ticket = &ticket }
 }
 
-func (c *Client) PositionsGet(opts ...PositionsGetOption) (*[]types.TradePosition, error) {
+func (c *Client) PositionsGet(opts ...PositionsGetOption) ([]types.TradePosition, error) {
 	req := &pb.PositionsGetRequest{}
 	for _, opt := range opts {
 		opt(req)
@@ -31,10 +31,10 @@ func (c *Client) PositionsGet(opts ...PositionsGetOption) (*[]types.TradePositio
 		return nil, err
 	}
 
-	return mt5grpc.ParseMT5GRPCResponse[[]*pb.TradePosition, []types.TradePosition](resp,
+	return mt5grpc.DereferenceListResponse(mt5grpc.ParseMT5GRPCResponse[[]*pb.TradePosition, []types.TradePosition](resp,
 		func() []*pb.TradePosition {
 			return resp.GetPositions()
-		})
+		}))
 }
 
 func (c *Client) PositionsTotal() (int32, error) {

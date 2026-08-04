@@ -1,6 +1,6 @@
 module github.com/hybrid-syntax/mt5-grpc/go/mt5grpc
 
-go 1.25.1
+go 1.26.0
 
 require (
 	github.com/jinzhu/copier v0.4.0

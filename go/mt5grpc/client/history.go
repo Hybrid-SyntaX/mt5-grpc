@@ -1,11 +1,12 @@
 package client
 
 import (
+	"time"
+
 	"github.com/hybrid-syntax/mt5-grpc/go/mt5grpc"
 	"github.com/hybrid-syntax/mt5-grpc/go/mt5grpc/core/types"
 	"github.com/hybrid-syntax/mt5-grpc/go/mt5grpc/internal/pb"
 	"google.golang.org/protobuf/types/known/timestamppb"
-	"time"
 )
 
 func (c *Client) HistoryOrdersTotal(
@@ -43,7 +44,7 @@ func HistoryOrdersGetWithTicket(ticket uint64) HistoryOrdersGetOption {
 func (c *Client) HistoryOrdersGet(
 	dateFrom time.Time,
 	dateTo time.Time,
-	opts ...HistoryOrdersGetOption) (*[]types.TradeOrder, error) {
+	opts ...HistoryOrdersGetOption) ([]types.TradeOrder, error) {
 
 	req := &pb.HistoryOrdersGetRequest{
 		DateFrom: timestamppb.New(dateFrom),
@@ -59,9 +60,9 @@ func (c *Client) HistoryOrdersGet(
 		return nil, err
 	}
 
-	return mt5grpc.ParseMT5GRPCResponse[[]*pb.TradeOrder, []types.TradeOrder](resp, func() []*pb.TradeOrder {
+	return mt5grpc.DereferenceListResponse(mt5grpc.ParseMT5GRPCResponse[[]*pb.TradeOrder, []types.TradeOrder](resp, func() []*pb.TradeOrder {
 		return resp.GetOrders()
-	})
+	}))
 }
 
 func (c *Client) HistoryDealsTotal(dateFrom time.Time, dateTo time.Time) (int32, error) {
@@ -95,7 +96,7 @@ func HistoryDealsGetWithTicket(ticket uint64) HistoryDealsGetOption {
 
 func (c *Client) HistoryDealsGet(dateFrom time.Time,
 	dateTo time.Time,
-	opts ...HistoryDealsGetOption) (*[]types.TradeDeal, error) {
+	opts ...HistoryDealsGetOption) ([]types.TradeDeal, error) {
 	req := &pb.HistoryDealsGetRequest{
 		DateFrom: timestamppb.New(dateFrom),
 		DateTo:   timestamppb.New(dateTo),
@@ -110,7 +111,7 @@ func (c *Client) HistoryDealsGet(dateFrom time.Time,
 		return nil, err
 	}
 
-	return mt5grpc.ParseMT5GRPCResponse[[]*pb.TradeDeal, []types.TradeDeal](resp, func() []*pb.TradeDeal {
+	return mt5grpc.DereferenceListResponse(mt5grpc.ParseMT5GRPCResponse[[]*pb.TradeDeal, []types.TradeDeal](resp, func() []*pb.TradeDeal {
 		return resp.GetDeals()
-	})
+	}))
 }

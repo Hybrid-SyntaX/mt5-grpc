@@ -42,3 +42,18 @@ func ParseMT5GRPCResponse[TSource any, TDest any](resp Response, getResult func(
 
 	return dst, nil
 }
+func DereferenceListResponse[TDest any](list *[]TDest, err error) ([]TDest, error) {
+	if list == nil {
+		return nil, err
+	}
+	return *list, nil
+
+}
+
+//func DereferenceList[TDest any](f func() (*[]TDest, error)) ([]TDest, error) {
+//	r, err := f()
+//	if r == nil {
+//		return nil, err
+//	}
+//	return *r, err
+//}

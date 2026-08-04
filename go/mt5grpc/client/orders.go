@@ -69,7 +69,7 @@ func OrdersGetWithTicket(ticket int64) OrdersGetOption {
 	return func(r *pb.OrdersGetRequest) { r.Ticket = &ticket }
 }
 
-func (c *Client) OrdersGet(opts ...OrdersGetOption) (*[]types.TradeOrder, error) {
+func (c *Client) OrdersGet(opts ...OrdersGetOption) ([]types.TradeOrder, error) {
 	req := &pb.OrdersGetRequest{}
 	for _, opt := range opts {
 		opt(req)
@@ -80,9 +80,9 @@ func (c *Client) OrdersGet(opts ...OrdersGetOption) (*[]types.TradeOrder, error)
 		return nil, err
 	}
 
-	return mt5grpc.ParseMT5GRPCResponse[[]*pb.TradeOrder, []types.TradeOrder](resp, func() []*pb.TradeOrder {
+	return mt5grpc.DereferenceListResponse(mt5grpc.ParseMT5GRPCResponse[[]*pb.TradeOrder, []types.TradeOrder](resp, func() []*pb.TradeOrder {
 		return resp.GetOrders()
-	})
+	}))
 }
 
 func (c *Client) OrderCalcMargin(

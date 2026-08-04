@@ -20,15 +20,15 @@ func (c *Client) MarketBookAdd(symbol string) (bool, error) {
 	return resp.Success, nil
 }
 
-func (c *Client) MarketBookGet(symbol string) (*[]types.BookInfo, error) {
+func (c *Client) MarketBookGet(symbol string) ([]types.BookInfo, error) {
 	resp, err := c.api.MarketBookGet(c.ctx, &pb.MarketBookGetRequest{Symbol: symbol})
 	if err != nil {
 		return nil, err
 	}
 
-	return mt5grpc.ParseMT5GRPCResponse[[]*pb.BookInfo, []types.BookInfo](resp, func() []*pb.BookInfo {
+	return mt5grpc.DereferenceListResponse(mt5grpc.ParseMT5GRPCResponse[[]*pb.BookInfo, []types.BookInfo](resp, func() []*pb.BookInfo {
 		return resp.GetBookInfos()
-	})
+	}))
 }
 
 func (c *Client) MarketBookRelease(symbol string) (bool, error) {
